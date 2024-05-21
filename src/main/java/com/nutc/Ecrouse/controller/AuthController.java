@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,48 +16,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nutc.Ecrouse.model.AuthenticationRequest;
-import com.nutc.Ecrouse.model.AuthenticationResponse;
 import com.nutc.Ecrouse.model.User;
+import com.nutc.Ecrouse.model.request.LoginRequest;
+import com.nutc.Ecrouse.model.request.RegisterRequest;
+import com.nutc.Ecrouse.model.response.AuthenticationResponse;
+import com.nutc.Ecrouse.model.response.StatusResponse;
+import com.nutc.Ecrouse.service.AuthenticationService;
 import com.nutc.Ecrouse.service.JwtService;
 import com.nutc.Ecrouse.service.UserService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
 	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private JwtService jwtService;
-
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@PostMapping("/login")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
-			throws Exception {
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getName(),
-					authenticationRequest.getPassword()));
-		} catch (AuthenticationException e) {
-			throw new Exception("Incorrect username or password", e);
-		}
-		final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getName());
-		final String jwt = jwtService.generateToken(userDetails.getUsername());
-		return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
-
-	}
+	private AuthenticationService service;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userService.saveUser(user);
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
+	public ResponseEntity<StatusResponse> register(@RequestBody @Validated RegisterRequest request) {
+		return ResponseEntity.ok(service.register(request));
 	}
 
+	@PostMapping("/login")
+	public ResponseEntity<AuthenticationResponse> login(@RequestBody @Validated LoginRequest request) {
+		return ResponseEntity.ok(service.login(request));
+	}
 }
