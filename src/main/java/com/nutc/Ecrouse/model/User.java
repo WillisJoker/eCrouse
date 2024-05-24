@@ -123,6 +123,6 @@ public class User implements UserDetails {
 	}
 
 	public enum AppUserRole {
-		USER, ADMIN
+		USER, ADMIN, MANAGER
 	}
 }

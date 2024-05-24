@@ -40,8 +40,10 @@ public class SecurityConfig {
 		http.headers().frameOptions().sameOrigin();
 		http.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-						.requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api-docs/**", "/h2-console/**")
-						.permitAll().requestMatchers("/api/auth/**").permitAll().anyRequest().authenticated())
+						.requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api-docs/**", "/h2-console/**") //
+						.permitAll().requestMatchers("/api/auth/**").permitAll() //
+						.requestMatchers("/test").hasRole("USER") //
+						.anyRequest().authenticated())
 				.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
