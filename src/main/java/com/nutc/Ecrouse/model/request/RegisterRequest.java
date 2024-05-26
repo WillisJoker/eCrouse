@@ -12,7 +12,6 @@ public class RegisterRequest {
 	public RegisterRequest() {
 	}
 
-	
 	public RegisterRequest(String userName, String email, String password, AppUserRole userRole) {
 		super();
 		this.userName = userName;

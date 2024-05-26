@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nutc.Ecrouse.model.AuthenticationRequest;
 import com.nutc.Ecrouse.model.User;
+import com.nutc.Ecrouse.model.request.AuthenticationRequest;
 import com.nutc.Ecrouse.model.request.LoginRequest;
 import com.nutc.Ecrouse.model.request.RegisterRequest;
 import com.nutc.Ecrouse.model.response.AuthenticationResponse;
@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
 	@Autowired
@@ -46,4 +47,5 @@ public class AuthController {
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody @Validated LoginRequest request) {
 		return ResponseEntity.ok(service.login(request));
 	}
+	
 }

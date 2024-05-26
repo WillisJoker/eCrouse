@@ -1,4 +1,4 @@
-package com.nutc.Ecrouse.model;
+package com.nutc.Ecrouse.model.request;
 
 public class AuthenticationRequest {
 	private String name;

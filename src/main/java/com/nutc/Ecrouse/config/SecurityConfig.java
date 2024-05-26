@@ -42,7 +42,6 @@ public class SecurityConfig {
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 						.requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api-docs/**", "/h2-console/**") //
 						.permitAll().requestMatchers("/api/auth/**").permitAll() //
-						.requestMatchers("/test").hasRole("USER") //
 						.anyRequest().authenticated())
 				.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider)
